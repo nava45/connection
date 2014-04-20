@@ -15,7 +15,6 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 admin = Admin(app)
 
-
 login_manager.login_view = "users.login_view"
 
 
@@ -41,8 +40,8 @@ if app.debug:
     ]
 
 #BluePrint register
-from app.users.views import users
-app.register_blueprint(users)
+#from app.users.views import mod as usersModule
+#app.register_blueprint(usersModule)
 
 #Main app module
 from app.main_app.views import mf
