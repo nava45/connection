@@ -7,8 +7,6 @@ from app.users.models import User, ROLE_USER, ROLE_ADMIN
 from app.decorators import crossdomain
 
 
-print crossdomain
-
 users = Blueprint('users', __name__)
 
 @login_manager.user_loader
@@ -22,6 +20,7 @@ def before_request():
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
+        g.login_form = LoginForm()
         #g.search_form = SearchForm()
  
 @oid.after_login
@@ -47,7 +46,7 @@ def after_login(resp):
         remember_me = session['remember_me']
         session.pop('remember_me', None)
     login_user(user, remember = remember_me)
-    return redirect(request.args.get('next') or url_for('index'))
+    return redirect(request.args.get('next') or url_for('main_flow.index'))
 
 
 @users.route('/login', methods = ['GET', 'POST'])
@@ -56,18 +55,38 @@ def after_login(resp):
 
 def login_view():
     if g.user is not None and g.user.is_authenticated():
-        return redirect(url_for('index'))
-    
+        return redirect(url_for('main_flow.index'))
+    form = LoginForm()
     openid = request.form.get('openid',None)
-    if openid:
-        #session['remember_me'] = form.remember_me.data
-        return oid.try_login(openid, ask_for = ['nickname', 'email'])
+    if form.validate_on_submit():
+        print "logging"
+        session['remember_me'] = form.remember_me.data
+        return oid.try_login(form.openid.data, ask_for = ['nickname', 'email','country','fullname','dob'])
+    
     return render_template('login.html', 
         title = 'Sign In',
+        form = form,
         providers = app.config['OPENID_PROVIDERS'])
+
+
+@users.route('/profile/<nickname>', methods = ['GET', 'POST'])
+def user_profile(nickname=None):
+    if nickname is None:
+        user = g.user
+    else:
+        user = User.query.filter_by(nickname=nickname).first()
+    if user and user.is_authenticated():
+        return render_template('user_profile.html',user=user)
+    flash("The userprofile is not existing.")
+    return render_template('user_profile.html')
 
 
 @users.route('/ajax_login', methods = ['GET', 'POST'])  
 def ajax_login():
     print "Ajax request", request.form.get('openid',None),request.form.get('provider',None)
     return jsonify({'d':1})
+
+@users.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main_flow.index'))

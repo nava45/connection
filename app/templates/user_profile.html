@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block flashes %}{% endblock %}
+{% block content %}
+{% if user %}
+	<h1>Hi {{user.nickname}}!!</h1>
+{% else %}
+	<span>profile Not found </span>
+{% endif %}
+{% endblock %}
