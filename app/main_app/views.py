@@ -6,11 +6,12 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 mf = Blueprint('main_flow', __name__)
 
 
-@mf.route('/')
+@mf.route('/', methods = ['GET', 'POST'])
 @login_required
 def index():
     """
     Index page of the web app
     """
-  
+    print "calll"
+    print "request data", request.data,request.args
     return render_template('index.html')

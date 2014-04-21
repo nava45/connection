@@ -3,12 +3,14 @@ import os
 from flask import Flask, request, render_template, send_from_directory
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, current_user
+from flask.ext.openid import OpenID
 from flask.ext.mail import Mail
 from flask.ext.admin import Admin
 
+from config import _basedir
+
 app = Flask(__name__)
 app.config.from_object('config')
-
 
 login_manager = LoginManager(app) 
 db = SQLAlchemy(app)
@@ -18,8 +20,10 @@ admin = Admin(app)
 
 login_manager.login_view = "users.login_view"
 
+oid = OpenID(app, os.path.join(_basedir, 'tmp'))
 
 #debugtoolbar
+"""
 if app.debug:
     from flask_debugtoolbar import DebugToolbarExtension
     from flask_debugtoolbar_lineprofilerpanel.profile import line_profile
@@ -39,6 +43,7 @@ if app.debug:
         # Add the line profiling
         'flask_debugtoolbar_lineprofilerpanel.panels.LineProfilerPanel'
     ]
+    """
 
 #BluePrint register
 from app.users.views import users
