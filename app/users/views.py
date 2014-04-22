@@ -50,9 +50,7 @@ def after_login(resp):
 
 
 @users.route('/login', methods = ['GET', 'POST'])
-@crossdomain(origin='*')
 @oid.loginhandler
-
 def login_view():
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('main_flow.index'))

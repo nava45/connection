@@ -1,5 +1,7 @@
 from hashlib import md5
-from app import db, app
+from app import db, app, admin
+from flask.ext.admin.contrib import sqla
+
 import re
 
 ROLE_USER = 0
@@ -71,3 +73,5 @@ class User(db.Model):
 
     def __repr__(self): # pragma: no cover
         return '<User %r>' % (self.nickname)
+    
+admin.add_view(sqla.ModelView(User, db.session))

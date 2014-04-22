@@ -19,11 +19,12 @@ admin = Admin(app)
 
 
 login_manager.login_view = "users.login_view"
+login_manager.login_message = "Log in da !"
 
 oid = OpenID(app, os.path.join(_basedir, 'tmp'))
 
 #debugtoolbar
-"""
+
 if app.debug:
     from flask_debugtoolbar import DebugToolbarExtension
     from flask_debugtoolbar_lineprofilerpanel.profile import line_profile
@@ -43,7 +44,7 @@ if app.debug:
         # Add the line profiling
         'flask_debugtoolbar_lineprofilerpanel.panels.LineProfilerPanel'
     ]
-    """
+    
 
 #BluePrint register
 from app.users.views import users
@@ -54,6 +55,7 @@ from app.main_app.views import mf
 app.register_blueprint(mf)
 
 #Static files
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'ico/favicon.ico')
@@ -73,3 +75,8 @@ def internal_error(error):
 def capfirst(s):
     #print s,type(s),dir(s),s.text
     return s.text.capitalize()
+
+@app.template_filter('unique')
+def unique(s):
+    print "messages",s
+    return set(s)
