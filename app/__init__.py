@@ -5,7 +5,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, current_user
 from flask.ext.openid import OpenID
 from flask.ext.mail import Mail
-from flask.ext.admin import Admin
 
 from config import _basedir
 
@@ -15,7 +14,7 @@ app.config.from_object('config')
 login_manager = LoginManager(app) 
 db = SQLAlchemy(app)
 mail = Mail(app)
-admin = Admin(app)
+
 
 
 login_manager.login_view = "users.login_view"

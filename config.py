@@ -1,7 +1,7 @@
 import os
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
-
+file_path = os.path.join(_basedir, 'play_files')
 
 DEBUG = True
 #DATABASE = 'n.db'
