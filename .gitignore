@@ -54,3 +54,7 @@ coverage.xml
 docs/_build/
 
 *.html~
+*.txt~
+
+app/static/play_files
+db_repository/

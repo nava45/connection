@@ -1,10 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% from "post.html" import post %}
 
-<div>
+<div class="body">
 
 <h3>Welcome you to connection home page</h3>
+<div class="row">
+{% for ic in posts.items %}
+    <div><h2>{{page}}/{{total}}</h2></div>
+    {{ post(ic) }}
+{% endfor %}
+
+<ul class="pager">
+    {% if posts.has_next %}
+    <li class="next"><a href="{{ url_for('main_flow.index', page = posts.next_num) }}">Next Tip</a></li>
+    {% endif %}
+</ul>
+</div>
+
+<form name="ans" method="post">
+Ans: <input type="text" size=40 id="answering" name="answering">
+
+</form>
+
 </div>
 
 {% endblock content %}

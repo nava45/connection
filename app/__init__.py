@@ -17,6 +17,7 @@ mail = Mail(app)
 
 
 
+
 login_manager.login_view = "users.login_view"
 login_manager.login_message = "Log in da !"
 

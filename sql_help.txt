@@ -1,0 +1,3 @@
+alter table user_details add user_id smallint unsigned not null default 0;
+
+

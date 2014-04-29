@@ -4,6 +4,7 @@ from app import app, oid, db, login_manager
 from app.users.forms import LoginForm
 from datetime import datetime
 from app.users.models import User, ROLE_USER, ROLE_ADMIN
+from app.main_app.models import UserDetails
 from app.decorators import crossdomain
 
 
@@ -29,6 +30,7 @@ def after_login(resp):
         flash(gettext('Invalid login. Please try again.'))
         return redirect(url_for('login_view'))
     user = User.query.filter_by(email = resp.email).first()
+    userdetails = UserDetails(user=user)
     if user is None:
         nickname = resp.nickname
         if nickname is None or nickname == "":
@@ -36,16 +38,25 @@ def after_login(resp):
         nickname = User.make_valid_nickname(nickname)
         nickname = User.make_unique_nickname(nickname)
         user = User(nickname = nickname, email = resp.email, role = ROLE_USER)
+        
         db.session.add(user)
+        db.session.add(userdetails)
         db.session.commit()
         # make the user follow him/herself
         db.session.add(user.follow(user))
         db.session.commit()
+        
+    userdetails = UserDetails.query.filter_by(user=user).first()
+    if userdetails is None:
+        userdetails = UserDetails(user=user)
+        db.session.add(userdetails)
+        db.session.commit()
+        
     remember_me = False
     if 'remember_me' in session:
         remember_me = session['remember_me']
         session.pop('remember_me', None)
-    login_user(user, remember = remember_me)
+    login_user(user, remember = True)
     return redirect(request.args.get('next') or url_for('main_flow.index'))
 
 
