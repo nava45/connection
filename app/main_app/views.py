@@ -5,7 +5,7 @@ from flask.ext.admin.contrib import sqla
 from sqlalchemy.sql.expression import func
 
 from app.main_app.models import Category, Connection, ImageCategory, UserDetails
-
+from app import db
 #admin.add_view(sqla.ModelView(Category, db.session))
 
 
@@ -22,8 +22,8 @@ def index(page=1):
     print request.method, g.user.nickname
     ud = UserDetails.query.filter_by(user=g.user).first()
     #connection = Connection.query.order_by(func.rand()).first()
-    connection = Connection.query.filter(Connection.id.notin_([i.id for i in ud.played_connections])).first()
-    
+    #connection = Connection.query.filter(Connection.id.notin_([i.id for i in ud.played_connections])).first()
+    connection = Connection.query.intersect(ud.played_connections).first()
     if connection is None:
         return "yet connections to be added."
     
@@ -31,6 +31,7 @@ def index(page=1):
     
     if request.method == 'GET':
         image_sets = connection.embedded_images
+        print "IS--::",image_sets,image_sets.count()
         TOTAL = image_sets.count()
         posts = image_sets.paginate(page, IMAGES_PER_PAGE, False)
         return render_template('index.html', posts=posts, total=TOTAL, page=page)
@@ -38,6 +39,8 @@ def index(page=1):
         print "answering", request.values.get('answering')
         ans = request.values.get('answering')
         if ans == connection.answer:
+            ud.played_connections.append(connection)
+            db.session.commit()
             return "success"
         
         image_sets = connection.embedded_images

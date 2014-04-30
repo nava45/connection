@@ -9,7 +9,8 @@ DEBUG = True
 SECRET_KEY = os.urandom(24)
 
 #DATABASE_PATH = os.path.join(_basedir, DATABASE)
-SQLALCHEMY_DATABASE_URI = "mysql+mysqldb://root:root@localhost/connection_proj?charset=utf8&use_unicode=0"
+#SQLALCHEMY_DATABASE_URI = "mysql+mysqldb://root:root@localhost/connection_proj?charset=utf8&use_unicode=0"
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'connexion.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(_basedir, 'db_repository')
 
 ERROR_LOG_PATH = "/tmp/err.log"

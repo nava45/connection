@@ -32,7 +32,8 @@ class UserDetails(db.Model):
     high_score = db.Column(db.Integer, default=0)
     rank = db.Column(db.Integer, default=0)
     played_connections = db.relationship('Connection',
-                                         secondary=user_played)
+                                         secondary=user_played,
+                                         backref=db.backref('userdetails', lazy='dynamic'),lazy='dynamic')
     user = db.relationship('User',
                            primaryjoin='UserDetails.user_id == User.id', 
                            backref=db.backref('userdetails', lazy='dynamic')

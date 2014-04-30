@@ -1,3 +1,9 @@
 alter table user_details add user_id smallint unsigned not null default 0;
 
+from app import *
+from app.users.models import *
+from app.main_app.models import *
+
+ud = UserDetails.query.filter_by(user=User(id=3)).first()
+
 

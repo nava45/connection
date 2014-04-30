@@ -19,7 +19,7 @@ mail = Mail(app)
 
 
 login_manager.login_view = "users.login_view"
-login_manager.login_message = "Log in da !"
+login_manager.login_message = "Please login!"
 
 oid = OpenID(app, os.path.join(_basedir, 'tmp'))
 
