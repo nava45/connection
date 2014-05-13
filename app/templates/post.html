@@ -1,11 +1,12 @@
 {% macro post(ic, size=20) -%}
-    <table class="table table-hover">
-    <tr>
-        <td style="width:30%;"><h2>{{ic.hint}}</h2></td>
-        <td>
-            <img id="post{{ic.id}}" src="/static/play_files/{{ic.path}}">
-            
-        </td>
-    </tr>
-</table>
+	<div class="post">
+		<div class="pimg">
+		<img id="post{{ic.id}}" src="/static/play_files/{{ic.path}}">
+		</div>
+		<div class="hint">
+			<h2 style="background-color:yellow;display: inline;">{{ic.hint}}</h2>
+		</div>
+	</div>
+
+    
 {%- endmacro %}
